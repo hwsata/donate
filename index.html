@@ -1,103 +1,259 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  	<meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="logo_pay.png">
- </head>
- <title>WS DONATE</title>
- <meta charset="UTF-8">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WINSENT - Donate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes neonGlow {
+            0%, 100% {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--neon-color), 0 0 30px var(--neon-color), 0 0 40px var(--neon-color);
+            }
+            50% {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--neon-color), 0 0 40px var(--neon-color), 0 0 50px var(--neon-color);
+            }
+        }
 
-    h1 {
-      font-size: 36px;
-      animation: typing 3s steps(20), blink .5s step-end infinite;
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: .15em solid orange;
-      width: 20ch;
-    }
+        @keyframes coinFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
-    @keyframes typing {
-      from {
-        width: 0;
-      }
-      to {
-        width: 20ch;
-      }
-    }
+        @keyframes buttonPulse {
+            0%, 100% {
+                box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--btn-color), 0 0 30px var(--btn-color);
+                border-color: var(--btn-color);
+            }
+            50% {
+                box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--btn-color), 0 0 40px var(--btn-color);
+                border-color: white;
+            }
+        }
 
-    @keyframes blink {
-      50% {
-        border-color: transparent;
-      }
-    }
+        @keyframes scanline {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 100vh;
+            }
+        }
 
-    h2 {
-      font-size: 24px;
-      animation: typing 3s steps(28), blink .5s step-end infinite;
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: .15em solid orange;
-      width: 28ch;
-    }
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 22%, 24%, 55% {
+                opacity: 0.5;
+            }
+        }
 
-    .button-list {
-      list-style-type: none;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
+        .coin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, #FFD700, #D4AF37);
+            border-radius: 50%;
+            animation: coinFall linear infinite;
+            z-index: 0;
+        }
 
-    .button {
-      border: 2px solid #800080;
-      color: black;
-      font-size: 16px;
-      border-radius: 5px;
-      padding: 10px;
-      width: 200px;
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
-    }
+        .neon-text {
+            --neon-color: #ff00ff;
+            animation: neonGlow 1.5s ease-in-out infinite alternate, flicker 3s infinite;
+            color: white;
+        }
 
-    .button:hover {
-      background-color: #800080;
-      color: white;
-    }
+        .neon-btn {
+            --btn-color: #00ffff;
+            animation: buttonPulse 2s ease-in-out infinite alternate;
+            transition: all 0.3s ease;
+            border: 2px solid;
+            position: relative;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
 
-    .button.home {
-      background-color: orange;
-      border: none;
-      color: black;
-    }
-  </style>
+        .neon-btn:hover {
+            transform: scale(1.05);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .neon-btn span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .crt-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+            z-index: 5;
+            animation: scanline 6s linear infinite;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--neon-color);
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            animation: neonGlow 1.5s infinite alternate, buttonPulse 2s infinite alternate;
+            --neon-color: #00ff00;
+            display: none;
+            z-index: 100;
+            max-width: 300px;
+        }
+
+        .home-btn {
+            --btn-color: #ff00ff;
+        }
+
+        .donate-btn {
+            --btn-color: #00ff00;
+        }
+
+        .qiwi-btn {
+            --btn-color: #ff9900;
+        }
+
+        .games-btn {
+            --btn-color: #9900ff;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #0a0a0a, #000000);
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 20px var(--primary-color);
+            animation: flicker 5s infinite;
+        }
+    </style>
 </head>
-<body>
-  <h1>Donate</h1>
-  <h2>Мне нужно больше золота!</h2>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden">
+    <div id="coins-container"></div>
+    <div class="crt-effect"></div>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-hand-holding-usd mr-2"></i> Обещаю, все деньги пойдут на еду! Спасибо за поддержку!
+    </div>
 
-  <ul class="button-list">
-    <li>
-      <button class="button" onclick="window.location.href='https://www.donationalerts.com/r/winsentsweet'">DonationAlerts</button>
-    </li>
-    <li>
-      <button class="button" onclick="window.location.href='https://qiwi.com/n/grwinsent'">QIWI</button>
-    </li>
-  </ul>
+    <div class="container text-center mb-8">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4 neon-text" style="--neon-color: #ff00ff;">
+            WINSENT DONATE
+        </h1>
+        <h2 class="text-2xl md:text-3xl neon-text" style="--neon-color: #00ffff;">
+            Мне нужно больше золота!
+        </h2>
+    </div>
 
-  <button class="button home" onclick="window.location.href='https://hwsata.github.io/mew'">На главную</button>
+    <div class="flex flex-col space-y-6 w-full max-w-md z-10">
+        <button onclick="window.location.href='https://www.donationalerts.com/r/winsentsweet'" 
+                class="neon-btn donate-btn py-3 px-6 rounded-lg text-white text-lg font-bold">
+            <i class="fas fa-donate mr-2"></i> DonationAlerts
+        </button>
+
+        <button onclick="window.location.href='https://qiwi.com/n/grwinsent'" 
+                class="neon-btn qiwi-btn py-3 px-6 rounded-lg text-white text-lg font-bold">
+            <i class="fas fa-wallet mr-2"></i> QIWI
+        </button>
+
+        <button onclick="window.location.href='https://hwsata.github.io/mew'" 
+                class="neon-btn home-btn py-3 px-6 rounded-lg text-white text-lg font-bold">
+            <i class="fas fa-home mr-2"></i> Домой
+        </button>
+    </div>
+
+    <script>
+        // Random theme on each load
+        document.addEventListener('DOMContentLoaded', function() {
+            const themes = [
+                { primary: '#ff00ff', secondary: '#00ffff', accent: '#00ff00' },
+                { primary: '#00ffff', secondary: '#ff00ff', accent: '#ff9900' },
+                { primary: '#9900ff', secondary: '#00ff99', accent: '#ff00aa' },
+                { primary: '#ff9900', secondary: '#0099ff', accent: '#ff00ff' },
+                { primary: '#00ff99', secondary: '#ff0099', accent: '#00ffff' }
+            ];
+            
+            const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+            
+            // Apply random colors
+            document.documentElement.style.setProperty('--primary-color', randomTheme.primary);
+            document.documentElement.style.setProperty('--secondary-color', randomTheme.secondary);
+            document.documentElement.style.setProperty('--accent-color', randomTheme.accent);
+            
+            // Update neon colors
+            document.querySelector('h1').style.setProperty('--neon-color', randomTheme.primary);
+            document.querySelector('h2').style.setProperty('--neon-color', randomTheme.secondary);
+            
+            // Update button colors
+            document.querySelector('.home-btn').style.setProperty('--btn-color', randomTheme.primary);
+            document.querySelector('.donate-btn').style.setProperty('--btn-color', randomTheme.accent);
+            document.querySelector('.qiwi-btn').style.setProperty('--btn-color', randomTheme.secondary);
+            
+            // Create falling coins
+            createCoins();
+            
+            // Show notification after delay
+            setTimeout(() => {
+                const notification = document.getElementById('notification');
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 5000);
+            }, 2000);
+        });
+
+        function createCoins() {
+            const coinsContainer = document.getElementById('coins-container');
+            const coinCount = 20;
+            
+            for (let i = 0; i < coinCount; i++) {
+                const coin = document.createElement('div');
+                coin.className = 'coin';
+                
+                // Random position and animation
+                const left = Math.random() * 100;
+                const duration = 5 + Math.random() * 10;
+                const delay = Math.random() * 5;
+                const size = 15 + Math.random() * 25;
+                
+                coin.style.left = `${left}%`;
+                coin.style.width = `${size}px`;
+                coin.style.height = `${size}px`;
+                coin.style.animationDuration = `${duration}s`;
+                coin.style.animationDelay = `${delay}s`;
+                
+                coinsContainer.appendChild(coin);
+            }
+        }
+    </script>
 </body>
 </html>
